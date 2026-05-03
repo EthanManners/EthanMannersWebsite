@@ -5,8 +5,8 @@ import {
 	ShaderMaterial,
 	Mesh,
 	AdditiveBlending,
-	type Scene,
-	type Camera
+	Color,
+	Vector3
 } from 'three';
 
 const PARTICLE_COUNT = 2500;
@@ -26,6 +26,7 @@ const VERT = /* glsl */ `
 
 	varying float vAlpha;
 	varying float vRetransmit;
+	varying vec2 vUv;
 
 	// Simplex-ish noise for turbulence
 	vec3 hash(vec3 p) {
@@ -58,11 +59,13 @@ const VERT = /* glsl */ `
 	}
 
 	void main() {
+		vUv = uv;
+
 		float speed = aSpeed * (0.3 + 0.7 * uScrollFactor);
 		float t = fract(aPhase + uTime * speed * 0.04);
 
 		// Base position: flow left to right
-		float x = mix(-${(FIELD_WIDTH / 2).toFixed(1)}, ${(FIELD_WIDTH / 2).toFixed(1)}, t);
+		float x = mix(-8.0, 8.0, t);
 		float y = aOffset.y;
 		float z = aOffset.z;
 
@@ -72,7 +75,7 @@ const VERT = /* glsl */ `
 		float ny = noise(vec3(x * 0.3 + 100.0, y * 0.3, turbTime + aPhase)) * 0.8;
 		float nz = noise(vec3(x * 0.3, y * 0.3 + 100.0, turbTime + aPhase)) * 0.6;
 
-		vec3 pos = vec3(x + nx, y + ny, z + nz);
+		vec3 particlePos = vec3(x + nx, y + ny, z + nz);
 
 		// Fade in at source, fade out at sink
 		float edgeFade = smoothstep(0.0, 0.08, t) * smoothstep(1.0, 0.88, t);
@@ -82,31 +85,33 @@ const VERT = /* glsl */ `
 		float isDropping = step(0.97, dropPhase) * aIsRetransmit;
 		float dropFade = 1.0 - isDropping;
 
-		vAlpha = edgeFade * dropFade * (0.4 + 0.6 * aIsRetransmit);
+		vAlpha = edgeFade * dropFade * (0.3 + 0.7 * aIsRetransmit);
 		vRetransmit = aIsRetransmit;
 
-		// Scale particle
-		float size = mix(0.02, 0.045, aSpeed) * (1.0 + 0.3 * aIsRetransmit);
+		// Billboard quad: offset position by the quad vertex in view space
+		float size = mix(0.03, 0.06, aSpeed) * (1.0 + 0.5 * aIsRetransmit);
 
-		vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-		gl_Position = projectionMatrix * (mvPosition + vec4(position.xy * size, 0.0, 0.0));
+		vec4 mvPosition = modelViewMatrix * vec4(particlePos, 1.0);
+		mvPosition.xy += position.xy * size;
+		gl_Position = projectionMatrix * mvPosition;
 	}
 `;
 
 const FRAG = /* glsl */ `
 	varying float vAlpha;
 	varying float vRetransmit;
+	varying vec2 vUv;
 
 	uniform vec3 uColorBase;
 	uniform vec3 uColorAccent;
 
 	void main() {
-		// Soft circle
-		vec2 center = gl_PointCoord - 0.5;
+		// Soft circle from UV (quad centered at 0.5, 0.5)
+		vec2 center = vUv - 0.5;
 		float dist = length(center);
 		if (dist > 0.5) discard;
 
-		float soft = 1.0 - smoothstep(0.2, 0.5, dist);
+		float soft = 1.0 - smoothstep(0.1, 0.5, dist);
 		vec3 color = mix(uColorBase, uColorAccent, vRetransmit);
 
 		gl_FragColor = vec4(color, vAlpha * soft);
@@ -114,21 +119,19 @@ const FRAG = /* glsl */ `
 `;
 
 export function createParticleSystem() {
-	// Base geometry: a tiny quad (billboard via vertex shader)
 	const baseGeo = new PlaneGeometry(1, 1);
 	const geo = new InstancedBufferGeometry();
 	geo.index = baseGeo.index;
 	geo.attributes.position = baseGeo.attributes.position;
 	geo.attributes.uv = baseGeo.attributes.uv;
 
-	// Instance attributes
 	const offsets = new Float32Array(PARTICLE_COUNT * 3);
 	const speeds = new Float32Array(PARTICLE_COUNT);
 	const phases = new Float32Array(PARTICLE_COUNT);
 	const retransmits = new Float32Array(PARTICLE_COUNT);
 
 	for (let i = 0; i < PARTICLE_COUNT; i++) {
-		offsets[i * 3] = 0; // x is computed in shader from phase
+		offsets[i * 3] = 0;
 		offsets[i * 3 + 1] = (Math.random() - 0.5) * FIELD_HEIGHT;
 		offsets[i * 3 + 2] = (Math.random() - 0.5) * FIELD_DEPTH;
 
@@ -149,8 +152,8 @@ export function createParticleSystem() {
 		uniforms: {
 			uTime: { value: 0 },
 			uScrollFactor: { value: 1 },
-			uColorBase: { value: { x: 0.91, y: 0.91, z: 0.93 } }, // --fg: #e8e8ed
-			uColorAccent: { value: { x: 1.0, y: 0.357, z: 0.122 } } // --accent: #ff5b1f
+			uColorBase: { value: new Color(0xe8e8ed) },
+			uColorAccent: { value: new Color(0xff5b1f) }
 		},
 		transparent: true,
 		blending: AdditiveBlending,

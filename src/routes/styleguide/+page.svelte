@@ -2,7 +2,7 @@
 	<title>Styleguide — Design Tokens</title>
 </svelte:head>
 
-<main class="mx-auto max-w-[960px] px-6 py-16">
+<div class="mx-auto max-w-[960px] px-6 py-16">
 	<h1 class="text-xl font-semibold mb-12">Design Tokens</h1>
 
 	<!-- ── Type Scale ── -->
@@ -119,7 +119,7 @@
 			</div>
 		</div>
 	</section>
-</main>
+</div>
 
 <style>
 	.motion-demo {

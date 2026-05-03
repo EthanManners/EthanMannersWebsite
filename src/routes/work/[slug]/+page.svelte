@@ -14,7 +14,7 @@
 	<title>{data.project.title} — Ethan Manners</title>
 </svelte:head>
 
-<main class="page">
+<div class="page">
 	<header class="page-header" use:reveal>
 		<a href="/work" class="back-link">Work</a>
 		<div class="title-row">
@@ -31,7 +31,7 @@
 	<article class="prose" use:reveal>
 		{@html data.html}
 	</article>
-</main>
+</div>
 
 <style>
 	.page {

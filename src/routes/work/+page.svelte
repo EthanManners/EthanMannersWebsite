@@ -13,7 +13,7 @@
 	<title>Work — Ethan Manners</title>
 </svelte:head>
 
-<main class="page">
+<div class="page">
 	<header class="page-header" use:reveal>
 		<h1 class="page-title">Work</h1>
 	</header>
@@ -39,7 +39,7 @@
 			</a>
 		{/each}
 	</div>
-</main>
+</div>
 
 <style>
 	.page {

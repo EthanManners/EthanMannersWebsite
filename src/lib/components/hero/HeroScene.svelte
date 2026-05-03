@@ -6,7 +6,7 @@
 </script>
 
 <div class="hero-canvas">
-	<Canvas>
+	<Canvas renderMode="always" autoRender={true}>
 		<Scene {scrollProgress} />
 	</Canvas>
 </div>
@@ -16,5 +16,7 @@
 		position: absolute;
 		inset: 0;
 		z-index: 0;
+		width: 100%;
+		height: 100%;
 	}
 </style>

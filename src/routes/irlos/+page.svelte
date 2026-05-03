@@ -60,7 +60,7 @@
 	<title>Irlos — Ethan Manners</title>
 </svelte:head>
 
-<main class="page">
+<div class="page">
 	<!-- ── What it is ── -->
 	<section class="section" use:reveal>
 		<h1 class="page-title">Irlos</h1>
@@ -132,7 +132,7 @@
 				Irlos is in active development. Drop your email and I'll let you know when
 				the first builds ship.
 			</p>
-			<form class="waitlist-form" onsubmit={handleSubmit}>
+			<form class="waitlist-form" onsubmit={handleSubmit} aria-label="Join the Irlos waitlist">
 				<input
 					type="email"
 					bind:value={email}
@@ -149,7 +149,7 @@
 			{/if}
 		{/if}
 	</section>
-</main>
+</div>
 
 <style>
 	.page {

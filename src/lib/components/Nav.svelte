@@ -8,7 +8,7 @@
 	];
 </script>
 
-<nav class="nav">
+<nav class="nav" aria-label="Main navigation">
 	<div class="nav-inner">
 		<a href="/" class="wordmark" class:active={page.url.pathname === '/'}>
 			Ethan Manners

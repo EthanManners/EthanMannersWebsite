@@ -9,7 +9,7 @@
 	<title>Now — Ethan Manners</title>
 </svelte:head>
 
-<main class="page">
+<div class="page">
 	<header class="page-header" use:reveal>
 		<h1 class="page-title">Now</h1>
 		<p class="page-sub">What I'm working on right now. Updated weekly.</p>
@@ -46,7 +46,7 @@
 			Inspired by <a href="https://nownownow.com" target="_blank" rel="noopener noreferrer" class="now-link">nownownow.com</a>. Edit this page at <code>src/content/now.md</code>.
 		</p>
 	</footer>
-</main>
+</div>
 
 <style>
 	.page {

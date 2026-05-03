@@ -131,6 +131,8 @@
 		min-height: 100vh;
 		min-height: 100svh;
 		overflow: hidden;
+		margin-top: -57px; /* bleed behind nav */
+		padding-top: 57px; /* compensate for content centering */
 	}
 
 	.hero-content {

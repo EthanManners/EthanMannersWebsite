@@ -1,0 +1,80 @@
+# ethanmanners.com — nginx config for static SvelteKit site
+# Assumes: build output in /var/www/ethanmanners.com/build/
+# Assumes: SSL terminated by certbot or upstream proxy
+
+server {
+    listen 80;
+    server_name ethanmanners.com www.ethanmanners.com;
+    return 301 https://ethanmanners.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name ethanmanners.com;
+
+    # SSL certs — adjust paths for your setup
+    # ssl_certificate     /etc/letsencrypt/live/ethanmanners.com/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/ethanmanners.com/privkey.pem;
+
+    root /var/www/ethanmanners.com/build;
+    index index.html;
+
+    # ── Compression ──
+    # Serve pre-compressed brotli/gzip from adapter-static (precompress: true)
+    # Falls back to on-the-fly gzip for anything not pre-compressed
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript image/svg+xml;
+    gzip_min_length 256;
+
+    # If ngx_brotli is installed:
+    # brotli on;
+    # brotli_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript image/svg+xml;
+
+    # Prefer pre-compressed files (.br > .gz > raw)
+    gzip_static on;
+    # brotli_static on;  # if ngx_brotli installed
+
+    # ── Immutable assets (hashed filenames, cache forever) ──
+    location /_app/immutable/ {
+        expires max;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # ── Fonts (long cache, rarely change) ──
+    location /fonts/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # ── Static assets ──
+    location ~* \.(avif|webp|png|jpg|jpeg|gif|ico|svg|woff2)$ {
+        expires 30d;
+        add_header Cache-Control "public";
+        access_log off;
+    }
+
+    # ── HTML pages ──
+    location / {
+        # Try exact file, then file.html (SvelteKit adapter-static output),
+        # then directory index, then 404
+        try_files $uri $uri.html $uri/ =404;
+
+        # Short cache for HTML — allows quick deploys
+        add_header Cache-Control "public, max-age=600";
+    }
+
+    # ── Security headers ──
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # ── Error pages ──
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+}
