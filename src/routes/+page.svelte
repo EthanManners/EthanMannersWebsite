@@ -1,5 +1,38 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
+	import { onMount } from 'svelte';
+
+	// Both hero variants are dynamically imported to keep Three.js out of the main bundle
+	let HeroComponent: any = $state(null);
+	let heroMode: 'webgl' | 'fallback' | null = $state(null);
+	let scrollProgress = $state(0);
+	let heroEl: HTMLElement | undefined = $state();
+
+	onMount(() => {
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		if (prefersReducedMotion) {
+			heroMode = 'fallback';
+			import('$lib/components/hero/HeroFallback.svelte').then((m) => {
+				HeroComponent = m.default;
+			});
+		} else {
+			heroMode = 'webgl';
+			import('$lib/components/hero/HeroScene.svelte').then((m) => {
+				HeroComponent = m.default;
+			});
+		}
+
+		function onScroll() {
+			if (!heroEl) return;
+			const rect = heroEl.getBoundingClientRect();
+			const progress = Math.max(0, Math.min(1, -rect.top / rect.height));
+			scrollProgress = progress;
+		}
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		return () => window.removeEventListener('scroll', onScroll);
+	});
 
 	const stats = [
 		{ value: '$700K+', label: 'Revenue generated across ventures' },
@@ -31,9 +64,15 @@
 	<title>Ethan Manners — Systems operator. Miami.</title>
 </svelte:head>
 
-<!-- ── Hero placeholder (WebGL goes here in phase 4) ── -->
-<section class="hero">
-	<div class="hero-bg"></div>
+<!-- ── Hero ── -->
+<section class="hero" bind:this={heroEl}>
+	{#if HeroComponent}
+		{#if heroMode === 'webgl'}
+			<HeroComponent {scrollProgress} />
+		{:else}
+			<HeroComponent />
+		{/if}
+	{/if}
 	<div class="hero-content">
 		<h1 class="hero-headline">Ethan Manners</h1>
 		<p class="hero-sub">Systems operator. Miami.</p>
@@ -92,16 +131,6 @@
 		min-height: 100vh;
 		min-height: 100svh;
 		overflow: hidden;
-	}
-
-	.hero-bg {
-		position: absolute;
-		inset: 0;
-		background: radial-gradient(
-			ellipse 60% 50% at 50% 50%,
-			color-mix(in srgb, var(--accent) 4%, transparent),
-			transparent
-		);
 	}
 
 	.hero-content {
