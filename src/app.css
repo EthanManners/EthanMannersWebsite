@@ -1,0 +1,108 @@
+@import 'tailwindcss';
+@import '$lib/styles/tokens.css';
+
+/* ── Tailwind theme extension ── */
+@theme {
+	--color-bg: #06070a;
+	--color-bg-elev: #0c0e13;
+	--color-fg: #e8e8ed;
+	--color-fg-muted: #8a8a93;
+	--color-fg-subtle: #4a4a52;
+	--color-accent: #ff5b1f;
+	--color-border: #1a1c22;
+
+	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+	--spacing-1: 0.5rem;
+	--spacing-2: 1rem;
+	--spacing-3: 1.5rem;
+	--spacing-4: 2rem;
+	--spacing-6: 3rem;
+	--spacing-8: 4rem;
+	--spacing-12: 6rem;
+	--spacing-16: 8rem;
+
+	--ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* ── Base reset ── */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	font-family: var(--font-sans);
+	font-size: var(--text-base);
+	line-height: var(--leading-base);
+	color: var(--fg);
+	background-color: var(--bg);
+	margin: 0;
+}
+
+/* ── Type utilities ── */
+.text-xs {
+	font-size: var(--text-xs);
+	line-height: var(--leading-xs);
+	letter-spacing: var(--tracking-xs);
+}
+
+.text-base {
+	font-size: var(--text-base);
+	line-height: var(--leading-base);
+	letter-spacing: var(--tracking-base);
+}
+
+.text-lg {
+	font-size: var(--text-lg);
+	line-height: var(--leading-lg);
+	letter-spacing: var(--tracking-lg);
+}
+
+.text-xl {
+	font-size: var(--text-xl);
+	line-height: var(--leading-xl);
+	letter-spacing: var(--tracking-xl);
+}
+
+/* ── Meta label style (xs + uppercase) ── */
+.meta {
+	font-size: var(--text-xs);
+	line-height: var(--leading-xs);
+	letter-spacing: var(--tracking-xs);
+	text-transform: uppercase;
+	color: var(--fg-muted);
+}
+
+/* ── Selection ── */
+::selection {
+	background-color: var(--accent);
+	color: var(--bg);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+	width: 6px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--fg-subtle);
+	border-radius: 3px;
+}
+
+/* ── Focus visible ── */
+:focus-visible {
+	outline: 1px solid var(--accent);
+	outline-offset: 2px;
+}
