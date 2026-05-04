@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#06070a" />
+		<meta name="description" content="Ethan Manners — Systems operator. Miami." />
+		<link rel="preload" href="/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
+		<link href="../_app/immutable/entry/start.D74Mih47.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/65b2PWvi.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/cYQtxUHy.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/odPIQbtb.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DRUPDNmi.js" rel="modulepreload">
+		<link href="../_app/immutable/entry/app.L8G-32N9.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Di6zslmw.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/CsaauQz1.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/0.Cp2W84-F.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/GZ9XnhH-.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/7.Mp5kchX-.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Cj2lRgzO.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/kmgcbWcT.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/ozqvp2YD.js" rel="modulepreload">
+		<!--9hm5jc--><!----><title>Irlos — Ethan Manners</title>
+		<link href="../_app/immutable/assets/0.CpgvJnga.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/7.4NYg2hmK.css" rel="stylesheet">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[0--><!--[--><a href="#main" class="skip-link svelte-12qhfyh">Skip to content</a> <nav class="nav svelte-1h32yp1" aria-label="Main navigation"><div class="nav-inner svelte-1h32yp1"><a href="/" class="wordmark svelte-1h32yp1">Ethan Manners</a> <div class="nav-links svelte-1h32yp1"><!--[--><a href="/work" class="nav-link svelte-1h32yp1">Work</a><a href="/now" class="nav-link svelte-1h32yp1">Now</a><a href="/irlos" class="nav-link svelte-1h32yp1">Irlos</a><!--]--></div></div></nav><!----> <main id="main" class="page-wrapper svelte-12qhfyh"><!----><div class="page-enter svelte-12qhfyh"><!--[--><div class="page svelte-9hm5jc"><header class="page-header svelte-9hm5jc"><a href="/work" class="back-link svelte-9hm5jc">Work</a> <div class="title-row svelte-9hm5jc"><h1 class="page-title svelte-9hm5jc">Irlos</h1> <span class="status-pill svelte-9hm5jc" style="color: var(--accent); border-color: var(--accent);">building</span></div></header> <article class="prose svelte-9hm5jc"><!----><h1>Irlos</h1>
+<p>Open-source streaming server stack purpose-built for IRL streamers.</p>
+<h2>The problem</h2>
+<p>Every IRL streamer today runs the same duct-taped stack: SLS for ingest, noalbs for failover, OBS for encoding, obs-websocket for remote control. Four separate processes, three config files, zero coordination. When something breaks mid-stream — and it always does — you&#39;re SSH-ing into a VPS while your audience watches a frozen frame.</p>
+<h2>The solution</h2>
+<p>One binary. irlosd is a C++ daemon that handles SRT ingest, transcoding, failover, and relay in a single process. irlos-tui is a Rust terminal interface for real-time monitoring. The whole stack is GPL and designed to run on hardware you own.</p>
+<h2>Stack</h2>
+<ul>
+<li><strong>irlosd</strong> — C++ daemon, libsrt, sdbus-cpp</li>
+<li><strong>irlos-tui</strong> — Rust, ratatui, Unix socket RPC</li>
+<li><strong>OBS plugin</strong> — replaces obs-websocket with ~200 lines and 7 operations</li>
+</ul>
+<h2>Status</h2>
+<p>Actively building. Core SRT ingest and relay working. RPC protocol in draft.</p>
+<!----></article></div><!--]--><!----></div><!----></main> <footer class="footer svelte-jz8lnl"><div class="footer-inner svelte-jz8lnl"><span class="footer-text svelte-jz8lnl">Ethan Manners</span> <div class="footer-links svelte-jz8lnl"><a href="https://github.com/EthanManners" target="_blank" rel="noopener noreferrer" class="footer-link svelte-jz8lnl">GitHub</a> <a href="https://x.com/" target="_blank" rel="noopener noreferrer" class="footer-link svelte-jz8lnl">X</a></div></div></footer><!----><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_7l0rsh = {
+						base: new URL("..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.D74Mih47.js"),
+						import("../_app/immutable/entry/app.L8G-32N9.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 7],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
